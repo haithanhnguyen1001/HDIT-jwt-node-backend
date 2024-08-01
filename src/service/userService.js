@@ -54,8 +54,38 @@ const deleteUser = async (id) => {
   }
 };
 
+const getUserById = async (id) => {
+  try {
+    const connection = await pool.getConnection();
+    const [rows, fields] = await connection.query(
+      "SELECT * FROM users WHERE id = ?",
+      [id]
+    );
+    connection.release();
+    return rows;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updateUserInfo = async (id, email, username) => {
+  try {
+    const connection = await pool.getConnection();
+    const [rows, fields] = await connection.query(
+      "UPDATE users set email = ?, username = ? where id = ?",
+      [email, username, id]
+    );
+    connection.release();
+    return rows;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   createNewUser,
   getListUser,
   deleteUser,
+  getUserById,
+  updateUserInfo,
 };

@@ -80,7 +80,12 @@
                 <td><%=user.email %></td>
                 <td><%=user.username %></td>
                 <td>
-                  <button class="btn btn-success">EDIT</button>
+                  <a
+                    style="display: inline-block"
+                    href="/user/update-user/<%=user.id %>"
+                  >
+                    <button class="btn btn-success">EDIT</button>
+                  </a>
                   <form
                     style="display: inline-block"
                     method="POST"
