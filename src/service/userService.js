@@ -30,20 +30,32 @@ const createNewUser = async (email, password, username) => {
 };
 
 const getListUser = async () => {
-  let users = [];
   try {
     const connection = await pool.getConnection();
     const [rows, fields] = await connection.query("SELECT * from users");
-    users = rows;
     connection.release();
+    return rows;
   } catch (error) {
     console.log(error);
   }
+};
 
-  return users;
+const deleteUser = async (id) => {
+  try {
+    const connection = await pool.getConnection();
+    const [rows, fields] = await connection.query(
+      "DELETE FROM users WHERE id = ?",
+      [id]
+    );
+    connection.release();
+    return rows;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = {
   createNewUser,
   getListUser,
+  deleteUser,
 };

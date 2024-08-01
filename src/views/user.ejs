@@ -81,7 +81,13 @@
                 <td><%=user.username %></td>
                 <td>
                   <button class="btn btn-success">EDIT</button>
-                  <button class="btn btn-danger">DELETE</button>
+                  <form
+                    style="display: inline-block"
+                    method="POST"
+                    action="/user/delete-user/<%=user.id %>"
+                  >
+                    <button type="submit" class="btn btn-danger">DELETE</button>
+                  </form>
                 </td>
               </tr>
               <% }) %>
