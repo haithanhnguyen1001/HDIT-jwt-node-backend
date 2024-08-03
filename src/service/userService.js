@@ -20,7 +20,7 @@ const createNewUser = async (email, password, username) => {
   try {
     const connection = await pool.getConnection();
     const [result, fields] = await connection.query(
-      `INSERT INTO users (email,password,username) VALUES (?,?,?)`,
+      `INSERT INTO user (email,password,username) VALUES (?,?,?)`,
       [email, userHashPassword, username]
     );
     connection.release();
@@ -32,7 +32,7 @@ const createNewUser = async (email, password, username) => {
 const getListUser = async () => {
   try {
     const connection = await pool.getConnection();
-    const [rows, fields] = await connection.query("SELECT * from users");
+    const [rows, fields] = await connection.query("SELECT * from user");
     connection.release();
     return rows;
   } catch (error) {
@@ -44,7 +44,7 @@ const deleteUser = async (id) => {
   try {
     const connection = await pool.getConnection();
     const [rows, fields] = await connection.query(
-      "DELETE FROM users WHERE id = ?",
+      "DELETE FROM user WHERE id = ?",
       [id]
     );
     connection.release();
@@ -58,7 +58,7 @@ const getUserById = async (id) => {
   try {
     const connection = await pool.getConnection();
     const [rows, fields] = await connection.query(
-      "SELECT * FROM users WHERE id = ?",
+      "SELECT * FROM user WHERE id = ?",
       [id]
     );
     connection.release();
@@ -72,7 +72,7 @@ const updateUserInfo = async (id, email, username) => {
   try {
     const connection = await pool.getConnection();
     const [rows, fields] = await connection.query(
-      "UPDATE users set email = ?, username = ? where id = ?",
+      "UPDATE user set email = ?, username = ? where id = ?",
       [email, username, id]
     );
     connection.release();
