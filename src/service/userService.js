@@ -1,4 +1,5 @@
 import mysql from "mysql2/promise";
+import db from "../models/index";
 import bcrypt from "bcryptjs";
 const salt = bcrypt.genSaltSync(10);
 
@@ -18,12 +19,11 @@ const hashUserPassword = (password) => {
 const createNewUser = async (email, password, username) => {
   const userHashPassword = hashUserPassword(password);
   try {
-    const connection = await pool.getConnection();
-    const [result, fields] = await connection.query(
-      `INSERT INTO user (email,password,username) VALUES (?,?,?)`,
-      [email, userHashPassword, username]
-    );
-    connection.release();
+    await db.User.create({
+      email: email,
+      username: username,
+      password: userHashPassword,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -31,10 +31,9 @@ const createNewUser = async (email, password, username) => {
 
 const getListUser = async () => {
   try {
-    const connection = await pool.getConnection();
-    const [rows, fields] = await connection.query("SELECT * from user");
-    connection.release();
-    return rows;
+    let users = [];
+    users = await db.User.findAll();
+    return users;
   } catch (error) {
     console.log(error);
   }
@@ -42,13 +41,11 @@ const getListUser = async () => {
 
 const deleteUser = async (id) => {
   try {
-    const connection = await pool.getConnection();
-    const [rows, fields] = await connection.query(
-      "DELETE FROM user WHERE id = ?",
-      [id]
-    );
-    connection.release();
-    return rows;
+    await db.User.destroy({
+      where: {
+        id: id,
+      },
+    });
   } catch (error) {
     console.log(error);
   }
@@ -56,13 +53,11 @@ const deleteUser = async (id) => {
 
 const getUserById = async (id) => {
   try {
-    const connection = await pool.getConnection();
-    const [rows, fields] = await connection.query(
-      "SELECT * FROM user WHERE id = ?",
-      [id]
-    );
-    connection.release();
-    return rows;
+    let user = {};
+    user = await db.User.findOne({
+      where: { id: id },
+    });
+    return user;
   } catch (error) {
     console.log(error);
   }
@@ -70,13 +65,14 @@ const getUserById = async (id) => {
 
 const updateUserInfo = async (id, email, username) => {
   try {
-    const connection = await pool.getConnection();
-    const [rows, fields] = await connection.query(
-      "UPDATE user set email = ?, username = ? where id = ?",
-      [email, username, id]
+    await db.User.update(
+      { email: email, username, username },
+      {
+        where: {
+          id: id,
+        },
+      }
     );
-    connection.release();
-    return rows;
   } catch (error) {
     console.log(error);
   }

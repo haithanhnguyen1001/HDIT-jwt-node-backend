@@ -5,7 +5,7 @@ const handleHelloWorld = (req, res) => {
 
 const handleUserPage = async (req, res) => {
   let userList = await userService.getListUser();
-  console.log(userList);
+  // console.log(userList);
   return res.render("user.ejs", { userList });
 };
 
@@ -23,11 +23,7 @@ const handleDeleteUser = async (req, res) => {
 
 const getUpdateUserPage = async (req, res) => {
   const userId = req.params.id;
-  const user = await userService.getUserById(userId);
-  let userData = {};
-  if (user && user.length > 0) {
-    userData = user[0];
-  }
+  const userData = await userService.getUserById(userId);
   return res.render("user-update.ejs", { userData });
 };
 
