@@ -1,6 +1,7 @@
 import mysql from "mysql2/promise";
 import db from "../models/index";
 import bcrypt from "bcryptjs";
+import raw from "body-parser/lib/types/raw";
 const salt = bcrypt.genSaltSync(10);
 
 // Create the connection to database
@@ -17,7 +18,7 @@ const hashUserPassword = (password) => {
 };
 
 const createNewUser = async (email, password, username) => {
-  const userHashPassword = hashUserPassword(password);
+  let userHashPassword = hashUserPassword(password);
   try {
     await db.User.create({
       email: email,
@@ -31,8 +32,10 @@ const createNewUser = async (email, password, username) => {
 
 const getListUser = async () => {
   try {
+    // test relationship
     let users = [];
     users = await db.User.findAll();
+    // users = users.get({ plain: true });
     return users;
   } catch (error) {
     console.log(error);
@@ -66,7 +69,7 @@ const getUserById = async (id) => {
 const updateUserInfo = async (id, email, username) => {
   try {
     await db.User.update(
-      { email: email, username, username },
+      { email: email, username: username },
       {
         where: {
           id: id,
