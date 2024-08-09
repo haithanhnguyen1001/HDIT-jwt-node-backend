@@ -8,7 +8,6 @@ const router = express.Router();
  */
 const initApiRoute = (app) => {
   /*test api */
-  router.get("/test-api", apiController.testApi);
   router.post("/register", apiController.handleRegister);
   return app.use("/api/v1", router);
 };
